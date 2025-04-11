@@ -46,4 +46,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function tasks()
+{
+    return $this->hasMany(Task::class);
+}
+
+    // public function createToken($name, array $abilities = ['*'])
+    // {
+    //     return $this->tokens()->create([
+    //         'name' => $name,
+    //         'token' => hash('sha256', $name),
+    //         'abilities' => $abilities,
+    //     ]);
+    // }
 }

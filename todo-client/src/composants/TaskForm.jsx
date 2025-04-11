@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 
 const TaskForm = ({ onAddTask }) => {
     const [title, setTitle] = useState('');
+    const[description, setDescription] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (title.trim()) {
             onAddTask({ title });
             setTitle('');
+            setDescription('');
         }
     };
 
@@ -20,6 +22,13 @@ const TaskForm = ({ onAddTask }) => {
                     placeholder="Add new task..."
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2"
+                    placeholder="Description..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                 />
                 <button
                     type="submit"

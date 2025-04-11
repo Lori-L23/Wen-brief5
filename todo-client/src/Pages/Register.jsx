@@ -15,15 +15,32 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+     // Regrouper toutes les données attendues par Laravel
+  const userData = {
+    name,
+    email,
+    password,
+    password_confirmation: passwordConfirmation, // Laravel attend exactement ce nom
+  };
     
-    
-    try {
-      await register(name, email, password, passwordConfirmation);
-      navigate('/');
-    } catch (err) {
+  try {
+    const result = await register(userData); // on passe l'objet complet
+
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setError(result.error || 'Failed to register');
+    }
+  } catch (err) {
+    const responseError = err.response?.data?.errors;
+    if (responseError) {
+      const firstError = Object.values(responseError)[0][0]; // extrait le premier message
+      setError(firstError);
+    } else {
       setError(err.response?.data?.message || 'Failed to register');
     }
-  };
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -81,10 +98,10 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="password-confirmation" className="sr-only">Confirm Password</label>
+              <label htmlFor="passwordConfirmation" className="sr-only">Confirm Password</label>
               <input
-                id="password-confirmation"
-                name="password-confirmation"
+                id="passwordConfirmation"
+                name="passwordConfirmation"
                 type="password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"

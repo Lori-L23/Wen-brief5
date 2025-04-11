@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TaskItem = ({ task, onUpdateTask, onDeleteTask, onToggleComplete }) => {
+const TaskItem = ({ task,description, onUpdateTask, onDeleteTask, onToggleComplete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editTitle, setEditTitle] = useState(task.title);
 

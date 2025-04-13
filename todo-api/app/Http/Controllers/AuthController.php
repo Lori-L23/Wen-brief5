@@ -48,7 +48,7 @@ class AuthController extends Controller
         try {
             $request->validate([
                 'email' => 'required|email',
-                'password' => 'required',
+                'password' => 'required|string',
             ]);
 
             if (!Auth::attempt($request->only('email', 'password'))) {

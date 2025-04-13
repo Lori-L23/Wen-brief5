@@ -32,7 +32,8 @@ export const AuthProvider = ({ children }) => {
         password,
       });
   
-      console.log("Login success:", response.data);
+      console.log("Trying to login with:", { email, password });
+
   
       // sauvegarde le token si nécessaire
       setUser(response.data.user);
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   
       return { success: true };
     } catch (error) {
-      console.error("Login failed:", error.response?.data || error.message);
+      console.error("Login failed:", error?.response?.data || error?.message || 'Unknown error');
       return {
         success: false,
         error: error.response?.data?.message || 'Login failed',
@@ -54,21 +55,27 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await axios.post('http://localhost:8000/api/auth/register', userData);
-      console.log("Registration success:", response.data);
-      return { success: true, data: response.data };
+  
+      // Sauvegarder le token
+      localStorage.setItem('token', response.data.token);
+  
+      // Mettre à jour l'utilisateur courant
+      setUser(response.data.user);
+  
+      return { success: true };
     } catch (error) {
-      console.error("Registration failed:", error.response?.data || error.message);
       return {
         success: false,
         error: error.response?.data?.message || 'Registration failed',
-        errors: error.response?.data?.errors || null
+        errors: error.response?.data?.errors || {},
       };
     }
   };
+  
 
   const logout = async () => {
     try {
-      await api.post("auth/logout");
+      await api.post("/auth/logout");
     } finally {
       localStorage.removeItem("token");
       setUser(null);

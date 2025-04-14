@@ -25,10 +25,10 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-
             return response()->json([
                 'user' => $user,
-            ], 201);
+                // 'token' => $user->createToken('auth_token')->plainTextToken
+            ]);
 
         } catch (ValidationException $e) {
             return response()->json([

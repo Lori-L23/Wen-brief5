@@ -10,6 +10,8 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
+        Log::info('Tasks fetched by user: ' . optional($request->user())->id);
+    
         return $request->user()
             ->tasks()
             ->latest()
